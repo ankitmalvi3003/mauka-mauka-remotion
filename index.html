@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mauka Mauka Decoded — Review Tool</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    background: #0E1122; 
+    color: #EEF0F4; 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: flex; 
+    min-height: 100vh; 
+  }
+  /* Left: video player */
+  .player-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-width: 0;
+  }
+  .video-wrap {
+    position: relative;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  video {
+    max-height: 70vh;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .controls {
+    width: 100%;
+    max-width: 540px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .timeline-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    background: #161A2C;
+    border-radius: 3px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #60A4A1;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(96,164,161,0.5);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #60A4A1;
+    cursor: pointer;
+    border: none;
+  }
+  .time-display {
+    font-size: 13px;
+    color: #9AA3B2;
+    font-variant-numeric: tabular-nums;
+    min-width: 90px;
+    text-align: center;
+  }
+  .btn-row { display: flex; gap: 8px; justify-content: center; }
+  button {
+    background: #161A2C;
+    color: #EEF0F4;
+    border: 1px solid rgba(96,164,161,0.3);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  button:hover { border-color: #60A4A1; background: #1a2038; }
+  button.primary { background: #60A4A1; color: #0E1122; font-weight: 600; border: none; }
+  button.primary:hover { background: #6FB5B2; }
+  .scene-label {
+    font-size: 12px;
+    color: #60A4A1;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  /* Right: feedback panel */
+  .feedback-section {
+    width: 400px;
+    background: #11152A;
+    border-left: 1px solid rgba(96,164,161,0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  .feedback-section h2 {
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: #60A4A1;
+  }
+  .feedback-section .subtitle {
+    font-size: 12px;
+    color: #9AA3B2;
+    margin-bottom: 16px;
+  }
+  .comment-input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .timestamp-badge {
+    display: inline-block;
+    background: #C71B52;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    width: fit-content;
+  }
+  textarea {
+    background: #0E1122;
+    color: #EEF0F4;
+    border: 1px solid rgba(96,164,161,0.2);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+  }
+  textarea:focus { border-color: #60A4A1; }
+  .comments-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .comment-item {
+    background: #161A2C;
+    border-radius: 10px;
+    padding: 12px;
+    border-left: 3px solid #60A4A1;
+  }
+  .comment-item .time {
+    font-size: 11px;
+    color: #C71B52;
+    font-weight: 700;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+  .comment-item .text {
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  .comment-item .delete {
+    float: right;
+    color: #9AA3B2;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .comment-item .delete:hover { color: #C71B52; }
+  .empty-state {
+    text-align: center;
+    color: #9AA3B2;
+    padding: 40px 20px;
+    font-size: 14px;
+  }
+  .export-bar {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+  }
+  .scene-markers {
+    position: relative;
+    height: 24px;
+    margin-top: 4px;
+  }
+  .scene-marker {
+    position: absolute;
+    top: 0;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 6px;
+  }
+  /* Responsive */
+  @media (max-width: 900px) {
+    body { flex-direction: column; }
+    .feedback-section { width: 100%; max-height: 50vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="player-section">
+  <div class="video-wrap">
+    <div class="scene-label" id="sceneLabel">Scene 1 — Hook</div>
+    <video id="video" src="video.mp4" controls></video>
+    <div class="controls">
+      <div class="timeline-row">
+        <input type="range" id="scrubber" min="0" max="2310" value="0" step="1">
+        <span class="time-display" id="timeDisplay">00:00 / 01:17</span>
+      </div>
+      <div class="scene-markers" id="sceneMarkers"></div>
+      <div class="btn-row">
+        <button onclick="stepFrame(-1)">◀ Frame back</button>
+        <button id="playBtn" class="primary" onclick="togglePlay()">▶ Play</button>
+        <button onclick="stepFrame(1)">Frame ahead ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="feedback-section">
+  <h2>Frame-by-Frame Feedback</h2>
+  <p class="subtitle">Scrub to any frame, type what you see and what to change. Export when done.</p>
+  
+  <div class="comment-input-area">
+    <span class="timestamp-badge" id="commentTimestamp">00:00</span>
+    <textarea id="commentText" placeholder="What do you see? What should change?&#10;&#10;e.g. 'Charts too small, make them 2x bigger. Move video higher up. Add the ad title here.'" rows="4"></textarea>
+    <div class="btn-row">
+      <button class="primary" onclick="addComment()">+ Add feedback</button>
+      <button onclick="exportComments()">📋 Export all</button>
+    </div>
+  </div>
+
+  <div class="comments-list" id="commentsList">
+    <div class="empty-state">No feedback yet. Scrub the video and start typing!</div>
+  </div>
+</div>
+
+<script>
+const video = document.getElementById('video');
+const scrubber = document.getElementById('scrubber');
+const timeDisplay = document.getElementById('timeDisplay');
+const commentTimestamp = document.getElementById('commentTimestamp');
+const commentsList = document.getElementById('commentsList');
+const playBtn = document.getElementById('playBtn');
+const sceneLabel = document.getElementById('sceneLabel');
+
+const FPS = 30;
+const TOTAL_FRAMES = 2310;
+
+const SCENES = [
+  { start: 0, end: 420, name: 'Hook', color: '#60A4A1' },
+  { start: 420, end: 840, name: 'Live Brain', color: '#F0B429' },
+  { start: 840, end: 1260, name: 'Radar', color: '#C71B52' },
+  { start: 1260, end: 1560, name: 'Timeline', color: '#60A4A1' },
+  { start: 1560, end: 1860, name: 'Verdict', color: '#F0B429' },
+  { start: 1860, end: 2310, name: 'CTA', color: '#C71B52' },
+];
+
+let comments = [];
+
+// Format time as MM:SS
+function fmtTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// Format frame as MM:SS:FF
+function fmtFrame(frame) {
+  const s = frame / FPS;
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  const f = frame % FPS;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}:${String(f).padStart(2,'0')}`;
+}
+
+// Get current scene
+function currentScene(frame) {
+  for (const s of SCENES) {
+    if (frame >= s.start && frame < s.end) return s;
+  }
+  return SCENES[SCENES.length - 1];
+}
+
+// Update display
+function updateDisplay() {
+  const frame = parseInt(scrubber.value);
+  const time = frame / FPS;
+  video.currentTime = time;
+  timeDisplay.textContent = `${fmtTime(time)} / 01:17 (frame ${frame})`;
+  commentTimestamp.textContent = fmtTime(time);
+  const scene = currentScene(frame);
+  sceneLabel.textContent = `Scene ${SCENES.indexOf(scene) + 1} — ${scene.name}`;
+  sceneLabel.style.color = scene.color;
+}
+
+// Scrub handler
+scrubber.addEventListener('input', updateDisplay);
+
+// Frame step
+function stepFrame(n) {
+  const f = parseInt(scrubber.value) + n;
+  scrubber.value = Math.max(0, Math.min(TOTAL_FRAMES - 1, f));
+  updateDisplay();
+}
+
+// Play/pause
+function togglePlay() {
+  if (video.paused) {
+    video.play();
+    playBtn.textContent = '⏸ Pause';
+  } else {
+    video.pause();
+    playBtn.textContent = '▶ Play';
+  }
+}
+video.addEventListener('play', () => playBtn.textContent = '⏸ Pause');
+video.addEventListener('pause', () => playBtn.textContent = '▶ Play');
+video.addEventListener('timeupdate', () => {
+  const frame = Math.round(video.currentTime * FPS);
+  scrubber.value = frame;
+  timeDisplay.textContent = `${fmtTime(video.currentTime)} / 01:17 (frame ${frame})`;
+  commentTimestamp.textContent = fmtTime(video.currentTime);
+  const scene = currentScene(frame);
+  sceneLabel.textContent = `Scene ${SCENES.indexOf(scene) + 1} — ${scene.name}`;
+  sceneLabel.style.color = scene.color;
+});
+
+// Add comment
+function addComment() {
+  const text = document.getElementById('commentText').value.trim();
+  if (!text) return;
+  const frame = parseInt(scrubber.value);
+  const time = frame / FPS;
+  const scene = currentScene(frame);
+  comments.push({
+    frame,
+    time,
+    scene: scene.name,
+    text
+  });
+  document.getElementById('commentText').value = '';
+  renderComments();
+}
+
+// Render comments
+function renderComments() {
+  if (comments.length === 0) {
+    commentsList.innerHTML = '<div class="empty-state">No feedback yet. Scrub the video and start typing!</div>';
+    return;
+  }
+  commentsList.innerHTML = comments.map((c, i) => `
+    <div class="comment-item">
+      <span class="time" onclick="jumpTo(${c.frame})">⏱ ${fmtTime(c.time)} — ${c.scene} (frame ${c.frame})</span>
+      <span class="delete" onclick="deleteComment(${i})">✕</span>
+      <div class="text">${c.text.replace(/</g, '&lt;')}</div>
+    </div>
+  `).join('');
+}
+
+// Delete comment
+function deleteComment(i) {
+  comments.splice(i, 1);
+  renderComments();
+}
+
+// Jump to frame
+function jumpTo(frame) {
+  scrubber.value = frame;
+  updateDisplay();
+}
+
+// Export comments
+function exportComments() {
+  if (comments.length === 0) {
+    alert('No comments to export yet!');
+    return;
+  }
+  let text = 'MAUKA MAUKA DECODED — VIDEO FEEDBACK\n';
+  text += '=====================================\n\n';
+  comments.forEach(c => {
+    text += `[${fmtTime(c.time)}] Scene: ${c.scene} (frame ${c.frame})\n`;
+    text += `${c.text}\n`;
+    text += `${'─'.repeat(50)}\n\n`;
+  });
+  
+  // Copy to clipboard
+  navigator.clipboard.writeText(text).then(() => {
+    alert(`✅ ${comments.length} comments copied to clipboard!\n\nPaste into Telegram to send to Infi.`);
+  }).catch(() => {
+    // Fallback: download
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'video-feedback.txt';
+    a.click();
+  });
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowLeft') stepFrame(-1);
+  if (e.key === 'ArrowRight') stepFrame(1);
+  if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+});
+
+// Draw scene markers on timeline
+const markersDiv = document.getElementById('sceneMarkers');
+SCENES.forEach((s, i) => {
+  const marker = document.createElement('div');
+  marker.className = 'scene-marker';
+  marker.style.left = `${(s.start / TOTAL_FRAMES) * 100}%`;
+  marker.style.width = `${((s.end - s.start) / TOTAL_FRAMES) * 100}%`;
+  marker.style.background = s.color + '30';
+  marker.style.border = `1px solid ${s.color}60`;
+  marker.style.color = s.color;
+  marker.textContent = `${i + 1}. ${s.name}`;
+  marker.onclick = () => { jumpTo(s.start + 10); };
+  markersDiv.appendChild(marker);
+});
+
+// Initialize
+updateDisplay();
+</script>
+
+</body>
+</html>
