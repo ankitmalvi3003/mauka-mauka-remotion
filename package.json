@@ -1,0 +1,21 @@
+{
+  "name": "mauka-mauka-decoded",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx remotion studio src/index.tsx",
+    "build": "npx remotion render src/index.tsx MaukaMaukaDecoded out/video.mp4",
+    "build-with-audio": "npx remotion render src/index.tsx MaukaMaukaDecoded out/video-silent.mp4 && ffmpeg -y -i out/video-silent.mp4 -i public/narration-v6-eleven.mp3 -i public/music.mp3 -filter_complex \"[1:a]volume=1.0[a1];[2:a]volume=0.08[a2];[a1][a2]amix=inputs=2:duration=first[a]\" -map 0:v -map \"[a]\" -c:v copy -c:a aac -shortest out/video.mp4"
+  },
+  "dependencies": {
+    "@remotion/captions": "^4.0.484",
+    "@remotion/cli": "^4.0.484",
+    "@remotion/google-fonts": "^4.0.484",
+    "@remotion/media": "^4.0.484",
+    "@remotion/player": "^4.0.484",
+    "@remotion/transitions": "^4.0.484",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.484"
+  }
+}
