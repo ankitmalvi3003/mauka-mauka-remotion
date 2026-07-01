@@ -153,52 +153,125 @@
   .tab-content { display: none; flex: 1; flex-direction: column; overflow: hidden; }
   .tab-content.active { display: flex; }
   
-  /* Script tab */
-  .script-info {
-    font-size: 12px;
-    color: #9AA3B2;
-    margin-bottom: 12px;
-  }
-  .script-textarea {
+  /* Script tab — structured workspace */
+  .script-workspace {
     flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .script-intro {
+    background: #161A2C;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #9AA3B2;
+    border-left: 3px solid #60A4A1;
+  }
+  .script-intro b { color: #EEF0F4; }
+  .scene-card {
+    background: #161A2C;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(96,164,161,0.15);
+  }
+  .scene-card.has-direction { border-color: rgba(96,164,161,0.4); }
+  .scene-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .scene-card-header:hover { background: #1a2038; }
+  .scene-card-header .num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .scene-card-header .title {
+    font-size: 14px; font-weight: 600; color: #EEF0F4; flex: 1;
+  }
+  .scene-card-header .timing {
+    font-size: 11px; color: #9AA3B2; font-variant-numeric: tabular-nums;
+  }
+  .scene-card-header .status {
+    font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .status-empty { background: rgba(154,163,178,0.15); color: #9AA3B2; }
+  .status-draft { background: rgba(240,180,41,0.15); color: #F0B429; }
+  .status-ready { background: rgba(96,164,161,0.15); color: #60A4A1; }
+  .scene-card-body { display: none; padding: 0 14px 14px; }
+  .scene-card.expanded .scene-card-body { display: block; }
+  .scene-card.expanded .scene-card-header { border-bottom: 1px solid rgba(96,164,161,0.1); }
+  .scene-visual {
+    font-size: 12px; color: #9AA3B2; line-height: 1.5;
+    margin-bottom: 10px; padding: 8px 10px;
+    background: #0E1122; border-radius: 6px;
+    border-left: 2px solid rgba(154,163,178,0.2);
+  }
+  .scene-visual b { color: #60A4A1; }
+  .field-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 5px; display: flex; align-items: center; gap: 6px;
+  }
+  .field-label.direction { color: #F0B429; }
+  .field-label.script { color: #60A4A1; }
+  .scene-direction {
+    width: 100%;
+    background: #0E1122;
+    color: #EEF0F4;
+    border: 1px solid rgba(240,180,41,0.25);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 70px;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .scene-direction:focus { border-color: #F0B429; }
+  .scene-direction::placeholder { color: rgba(154,163,178,0.4); }
+  .scene-script {
+    width: 100%;
     background: #0E1122;
     color: #EEF0F4;
     border: 1px solid rgba(96,164,161,0.2);
     border-radius: 8px;
-    padding: 16px;
-    font-size: 15px;
+    padding: 10px 12px;
+    font-size: 14px;
     font-family: inherit;
-    line-height: 1.8;
-    resize: none;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 60px;
     outline: none;
-    white-space: pre-wrap;
   }
-  .script-textarea:focus { border-color: #60A4A1; }
+  .scene-script:focus { border-color: #60A4A1; }
+  .brain-data-inline {
+    font-size: 11px; color: #9AA3B2;
+    background: #0E1122; border-radius: 6px;
+    padding: 6px 10px; margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .brain-data-inline .teal { color: #60A4A1; font-weight: 600; }
+  .brain-data-inline .crimson { color: #C71B52; font-weight: 600; }
   .script-toolbar {
     display: flex;
     gap: 8px;
     margin-top: 12px;
+    padding-bottom: 4px;
   }
-  
-  /* Brain data section */
-  .brain-data {
-    background: #161A2C;
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 12px;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  .brain-data h3 {
-    color: #F0B429;
-    font-size: 13px;
-    margin-bottom: 8px;
-  }
-  .brain-data table { width: 100%; border-collapse: collapse; }
-  .brain-data td { padding: 4px 8px; }
-  .brain-data .metric { color: #9AA3B2; }
-  .brain-data .teal-val { color: #60A4A1; font-weight: 700; }
-  .brain-data .crimson-val { color: #C71B52; font-weight: 700; }
   
   /* Feedback tab */
   .comment-input-area {
@@ -325,35 +398,18 @@
     <div class="tab" onclick="switchTab('export')">📋 Export</div>
   </div>
 
-  <!-- SCRIPT TAB -->
+  <!-- SCRIPT TAB — STRUCTURED WORKSPACE -->
   <div class="tab-content active" id="tab-script">
-    <div class="script-info">
-      Narration script for ElevenLabs TTS. Edit freely — changes will be exported with your feedback.
+    <div class="script-workspace" id="scriptWorkspace">
+      <div class="script-intro">
+        <b>📝 Script Workshop</b><br>
+        Each scene has two fields. <b style="color:#F0B429">Direction</b> = your thoughts on what to convey (tone, emotion, key message). <b style="color:#60A4A1">Script</b> = the actual narration words for ElevenLabs TTS. Fill in your direction for each scene, then export and send to Infi. Infi will rewrite the scripts using Gemini 3.1 Pro and send back refined versions.
+      </div>
     </div>
-    <div class="brain-data">
-      <h3>🧠 BRAIN DATA (locked — do not edit)</h3>
-      <table>
-        <tr><td class="metric">Mauka Mauka 2015</td><td class="teal-val">EP=88, ED=77, Abs=26, Att=43, Mom=44, End=28</td></tr>
-        <tr><td class="metric">2024 Ad</td><td class="crimson-val">EP=64, ED=45, Abs=10, Att=38, Mom=76, End=65</td></tr>
-        <tr><td class="metric">Mean Engagement</td><td><strong>55.9%</strong></td></tr>
-        <tr><td class="metric">Emotional Seconds</td><td><strong>22/30</strong></td></tr>
-        <tr><td class="metric">Limbic Activation</td><td><strong>75.7%</strong></td></tr>
-      </table>
-    </div>
-    <textarea class="script-textarea" id="scriptText">You remember Mauka Mauka. India versus Pakistan. But the ad they ran in 2024? History will repeat? No? Exactly. We broke down what Mauka Mauka did to your brain.
-
-Your brain, second by second. Mean engagement fifty five point nine percent. Twenty two of thirty seconds emotionally engaged. Limbic activation seventy five point seven percent. This is what a legendary ad looks like inside your head.
-
-How the two ads compare. Mauka Mauka dominates on emotional power and depth. Twenty two of thirty seconds emotionally engaged versus only six. The twenty twenty four ad wins on momentum and end score, but those don't create legends.
-
-Twenty twenty four kept brains cold. Mauka Mauka kept brains emotionally alive. Segment by segment, the data tells the same story.
-
-The twenty twenty four ad was mechanically perfect. Mauka Mauka had soul. That's why nobody remembers the twenty twenty four ad. That's why everyone still remembers Mauka Mauka.
-
-ViewBrain. Brain decoded advertising. We measure what audiences feel, not what they click. Visit viewbrain dot A I to see your ads through your audience's brains.</textarea>
     <div class="script-toolbar">
-      <button class="primary" onclick="copyScript()">📋 Copy script</button>
-      <button onclick="resetScript()">↺ Reset</button>
+      <button class="primary" onclick="exportScriptPackage()">📋 Export for Infi</button>
+      <button onclick="expandAll(true)">⬇ Expand all</button>
+      <button onclick="expandAll(false)">⬆ Collapse all</button>
     </div>
   </div>
 
@@ -391,9 +447,7 @@ const commentTimestamp = document.getElementById('commentTimestamp');
 const commentsList = document.getElementById('commentsList');
 const playBtn = document.getElementById('playBtn');
 const sceneLabel = document.getElementById('sceneLabel');
-const scriptText = document.getElementById('scriptText');
-
-const ORIGINAL_SCRIPT = scriptText.value;
+const scriptWorkspace = document.getElementById('scriptWorkspace');
 
 const FPS = 30;
 const TOTAL_FRAMES = 2310;
@@ -406,6 +460,156 @@ const SCENES = [
   { start: 1560, end: 1860, name: 'Verdict', color: '#F0B429' },
   { start: 1860, end: 2310, name: 'CTA', color: '#C71B52' },
 ];
+
+// ── Scene script data (direction + script per scene) ──
+const SCENE_SCRIPTS = [
+  {
+    num: 1, name: 'Hook', timing: '0:00 — 0:14 (14s)', color: '#60A4A1',
+    visual: '<b>On screen:</b> Mauka Mauka 2015 thumbnail (teal border), title "You remember Mauka Mauka", subtitle "But the ad they ran in 2024?", gold punchline "No? Exactly."',
+    brainData: null,
+    direction: '',
+    script: 'You remember Mauka Mauka. India versus Pakistan. But the ad they ran in 2024? History will repeat? No? Exactly. We broke down what Mauka Mauka did to your brain.',
+  },
+  {
+    num: 2, name: 'Live Brain', timing: '0:14 — 0:28 (14s)', color: '#F0B429',
+    visual: '<b>On screen:</b> Actual Mauka Mauka ad playing (15s clip), 3 animated brain wave charts (Attention/Emotion/Engagement) filling in real-time below video, KPI cards, comparison preview bars',
+    brainData: '<span class="teal">Mauka Mauka:</span> Mean Eng=55.9%, Emotion=22/30s, Limbic=75.7% | <span class="crimson">2024 Ad:</span> Mean Eng=33.5%, Emotion=6/30s, Limbic=42.1%',
+    direction: '',
+    script: 'Your brain, second by second. Mean engagement fifty five point nine percent. Twenty two of thirty seconds emotionally engaged. Limbic activation seventy five point seven percent. This is what a legendary ad looks like inside your head.',
+  },
+  {
+    num: 3, name: 'Radar', timing: '0:28 — 0:42 (14s)', color: '#C71B52',
+    visual: '<b>On screen:</b> Hexagonal radar chart comparing both ads across 6 axes (Emotional Power, Emotional Depth, Absorption, Attention, Momentum, End Score), thumbnails + legend, key stat cards',
+    brainData: '<span class="teal">Mauka:</span> EP=88, ED=77, Abs=26, Att=43, Mom=44, End=28 | <span class="crimson">2024:</span> EP=64, ED=45, Abs=10, Att=38, Mom=76, End=65',
+    direction: '',
+    script: 'How the two ads compare. Mauka Mauka dominates on emotional power and depth. Twenty two of thirty seconds emotionally engaged versus only six. The twenty twenty four ad wins on momentum and end score, but those don\'t create legends.',
+  },
+  {
+    num: 4, name: 'Timeline', timing: '0:42 — 0:52 (10s)', color: '#60A4A1',
+    visual: '<b>On screen:</b> Two horizontal timelines (Mauka teal, 2024 crimson) with 10 segment bars each showing engagement intensity per 3s window, time axis labels 0s-30s, gradient legend',
+    brainData: '<span class="teal">Mauka:</span> High intensity bars throughout, peaks at 21-24s | <span class="crimson">2024:</span> Low flat bars throughout, no emotional peaks',
+    direction: '',
+    script: 'Twenty twenty four kept brains cold. Mauka Mauka kept brains emotionally alive. Segment by segment, the data tells the same story.',
+  },
+  {
+    num: 5, name: 'Verdict', timing: '0:52 — 1:02 (10s)', color: '#F0B429',
+    visual: '<b>On screen:</b> "The 2024 ad was mechanically perfect" (crimson), then large gold "Mauka Mauka had SOUL.", then "That\'s why nobody remembers the 2024 ad" / "That\'s why everyone still remembers Mauka Mauka" (teal), validated badge',
+    brainData: null,
+    direction: '',
+    script: 'The twenty twenty four ad was mechanically perfect. Mauka Mauka had soul. That\'s why nobody remembers the twenty twenty four ad. That\'s why everyone still remembers Mauka Mauka.',
+  },
+  {
+    num: 6, name: 'CTA', timing: '1:02 — 1:17 (15s)', color: '#C71B52',
+    visual: '<b>On screen:</b> Gold glowing border, ViewBrain logo, tagline "Brain decoded advertising", "We measure what audiences feel, not what they click", URL pill "viewbrain.ai", animated brain wave at bottom',
+    brainData: null,
+    direction: '',
+    script: 'ViewBrain. Brain decoded advertising. We measure what audiences feel, not what they click. Visit viewbrain dot A I to see your ads through your audience\'s brains.',
+  },
+];
+
+// ── Build scene cards ──
+function buildSceneCards() {
+  SCENE_SCRIPTS.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'scene-card';
+    card.id = `scene-card-${i}`;
+    
+    const status = s.direction.trim() ? (s.script.trim() ? 'ready' : 'draft') : 'empty';
+    const statusLabel = status === 'ready' ? '✓ Ready' : status === 'draft' ? '✎ Draft' : 'Empty';
+    
+    card.innerHTML = `
+      <div class="scene-card-header" onclick="toggleCard(${i})">
+        <div class="num" style="background:${s.color}20; color:${s.color}; border:1px solid ${s.color}60">${s.num}</div>
+        <div class="title">${s.name}</div>
+        <div class="timing">${s.timing}</div>
+        <div class="status status-${status}" id="status-${i}">${statusLabel}</div>
+      </div>
+      <div class="scene-card-body">
+        <div class="scene-visual">${s.visual}</div>
+        ${s.brainData ? `<div class="brain-data-inline">🧠 ${s.brainData}</div>` : ''}
+        <div class="field-label direction">🎯 My Direction — what I want to convey</div>
+        <textarea class="scene-direction" id="direction-${i}" placeholder="e.g. 'Make this feel nostalgic. Remind them of the 2015 World Cup excitement. The 2024 ad should feel forgettable by contrast. Don't be too aggressive — let the data do the talking.'" oninput="updateStatus(${i})">${s.direction}</textarea>
+        <div class="field-label script">🎙 Narration Script (for ElevenLabs TTS)</div>
+        <textarea class="scene-script" id="script-${i}" oninput="updateStatus(${i})">${s.script}</textarea>
+      </div>
+    `;
+    scriptWorkspace.appendChild(card);
+  });
+}
+
+function toggleCard(i) {
+  const card = document.getElementById(`scene-card-${i}`);
+  card.classList.toggle('expanded');
+}
+
+function expandAll(expand) {
+  document.querySelectorAll('.scene-card').forEach(c => {
+    if (expand) c.classList.add('expanded');
+    else c.classList.remove('expanded');
+  });
+}
+
+function updateStatus(i) {
+  const dir = document.getElementById(`direction-${i}`).value.trim();
+  const scr = document.getElementById(`script-${i}`).value.trim();
+  const card = document.getElementById(`scene-card-${i}`);
+  const statusEl = document.getElementById(`status-${i}`);
+  
+  SCENE_SCRIPTS[i].direction = dir;
+  SCENE_SCRIPTS[i].script = scr;
+  
+  let status, label;
+  if (dir && scr) { status = 'ready'; label = '✓ Ready'; card.classList.add('has-direction'); }
+  else if (dir || scr !== SCENE_SCRIPTS[i].script) { status = 'draft'; label = '✎ Draft'; card.classList.add('has-direction'); }
+  else { status = 'empty'; label = 'Empty'; card.classList.remove('has-direction'); }
+  
+  statusEl.className = `status status-${status}`;
+  statusEl.textContent = label;
+}
+
+// ── Export script package ──
+function exportScriptPackage() {
+  let text = '📝 MAUKA MAUKA — SCRIPT WORKSHOP EXPORT\n';
+  text += '=========================================\n';
+  text += `Date: ${new Date().toLocaleString()}\n\n`;
+  
+  let hasContent = false;
+  
+  SCENE_SCRIPTS.forEach((s, i) => {
+    const dir = document.getElementById(`direction-${i}`).value.trim();
+    const scr = document.getElementById(`script-${i}`).value.trim();
+    
+    if (dir || scr) hasContent = true;
+    
+    text += `━━━ SCENE ${s.num}: ${s.name} (${s.timing}) ━━━\n`;
+    text += `\nVISUAL: ${s.visual.replace(/<\/?b>/g,'')}\n`;
+    if (s.brainData) text += `BRAIN DATA: ${s.brainData.replace(/<\/?span[^>]*>/g,'').replace(/<[^>]+>/g,'')}\n`;
+    
+    if (dir) {
+      text += `\n🎯 MY DIRECTION:\n${dir}\n`;
+    } else {
+      text += `\n🎯 MY DIRECTION: (not filled — keeping current script)\n`;
+    }
+    text += `\n🎙 SCRIPT:\n${scr}\n\n`;
+  });
+  
+  if (!hasContent) {
+    alert('No direction or script changes yet. Fill in your thoughts on any scene first!');
+    return;
+  }
+  
+  navigator.clipboard.writeText(text).then(() => {
+    alert(`✅ Script package copied!\n\n${SCENE_SCRIPTS.filter((s,i) => document.getElementById(`direction-${i}`).value.trim()).length} scenes with direction.\nPaste into Telegram to send to Infi.`);
+  }).catch(() => {
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'mauka-mauka-script-direction.txt';
+    a.click();
+  });
+}
+
+buildSceneCards();
 
 let comments = [];
 
@@ -495,35 +699,37 @@ function renderComments() {
 function deleteComment(i) { comments.splice(i, 1); renderComments(); }
 function jumpTo(frame) { scrubber.value = frame; updateDisplay(); }
 
-// Script
-function copyScript() {
-  navigator.clipboard.writeText(scriptText.value).then(() => {
-    alert('✅ Script copied to clipboard!');
-  });
-}
-function resetScript() {
-  if (confirm('Reset script to original? Your edits will be lost.')) {
-    scriptText.value = ORIGINAL_SCRIPT;
-  }
-}
+// Script export functions removed — replaced by exportScriptPackage() in scene card system
 
 // Export
 function updateExportPreview() {
   const hasComments = comments.length > 0;
-  const scriptChanged = scriptText.value !== ORIGINAL_SCRIPT;
+  const hasScriptDirection = SCENE_SCRIPTS.some((s, i) => {
+    const dir = document.getElementById(`direction-${i}`);
+    return dir && dir.value.trim();
+  });
   
-  if (!hasComments && !scriptChanged) {
-    document.getElementById('exportPreview').textContent = 'Nothing to export yet. Add feedback comments and edit the script first.';
+  if (!hasComments && !hasScriptDirection) {
+    document.getElementById('exportPreview').textContent = 'Nothing to export yet. Add feedback comments or fill in script direction first.';
     return;
   }
   
   let text = 'MAUKA MAUKA DECODED — REVIEW EXPORT\n';
   text += '=====================================\n\n';
   
-  if (scriptChanged) {
-    text += '📝 SCRIPT CHANGES\n';
-    text += '─────────────────\n';
-    text += scriptText.value + '\n\n';
+  if (hasScriptDirection) {
+    text += '📝 SCRIPT DIRECTION\n';
+    text += '──────────────────\n';
+    SCENE_SCRIPTS.forEach((s, i) => {
+      const dir = document.getElementById(`direction-${i}`).value.trim();
+      const scr = document.getElementById(`script-${i}`).value.trim();
+      if (dir || scr !== s.script) {
+        text += `\n[Scene ${s.num}: ${s.name} — ${s.timing}]\n`;
+        if (dir) text += `DIRECTION: ${dir}\n`;
+        text += `SCRIPT: ${scr}\n`;
+      }
+    });
+    text += '\n';
   }
   
   if (hasComments) {
